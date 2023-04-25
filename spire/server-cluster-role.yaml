@@ -11,6 +11,9 @@ rules:
 - apiGroups: [""]
   resources: ["configmaps"]
   verbs: ["patch", "get", "list"]
+- apiGroups: ["cert-manager.io"]
+  resources: ["certificates","certificaterequests","issuers"]
+  verbs: ["*"]
 
 ---
 # Binds above cluster role to spire-server service account

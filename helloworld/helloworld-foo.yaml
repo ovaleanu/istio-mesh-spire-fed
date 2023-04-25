@@ -12,40 +12,40 @@ metadata:
     service: helloworld
 spec:
   ports:
-  - port: 5000
-    name: http
+    - port: 5000
+      name: http
   selector:
     app: helloworld
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-v2
+  name: helloworld-v1
   labels:
     app: helloworld
-    version: v2
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: helloworld
-      version: v2
+      version: v1
   template:
     metadata:
       labels:
         app: helloworld
-        version: v2
+        version: v1
       annotations:
         inject.istio.io/templates: "sidecar,spire"
-        spiffe.io/federatesWith: "aws.com"
+        spiffe.io/federatesWith: "bar.com"
     spec:
       serviceAccountName: helloworld
       containers:
-      - name: helloworld
-        image: docker.io/istio/examples-helloworld-v2
-        resources:
-          requests:
-            cpu: "100m"
-        imagePullPolicy: IfNotPresent #Always
-        ports:
-        - containerPort: 5000
+        - name: helloworld
+          image: docker.io/istio/examples-helloworld-v1
+          resources:
+            requests:
+              cpu: "100m"
+          imagePullPolicy: IfNotPresent #Always
+          ports:
+            - containerPort: 5000

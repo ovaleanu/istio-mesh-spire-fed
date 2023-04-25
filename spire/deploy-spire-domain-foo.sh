@@ -9,7 +9,7 @@ set -e
 kubectl apply \
     -f spire-ns.yaml \
     -f k8s-workload-registrar-crd-cluster-role.yaml \
-    -f k8s-workload-registrar-crd-configmap-aws.yaml \
+    -f k8s-workload-registrar-crd-configmap-foo.yaml \
     -f spiffeid.spiffe.io_spiffeids.yaml
 
 # Create the server’s service account, configmap and associated role bindings
@@ -20,7 +20,7 @@ kubectl apply \
 
 # Deploy the server configmap and statefulset
 kubectl apply \
-    -f server-configmap-aws.yaml \
+    -f server-configmap-foo.yaml \
     -f server-statefulset.yaml \
     -f server-service.yaml
 
@@ -32,7 +32,7 @@ kubectl apply \
 sleep 2
 
 kubectl apply \
-    -f agent-configmap-aws.yaml \
+    -f agent-configmap-foo.yaml \
     -f agent-daemonset.yaml
 
 # Applying SPIFFE CSI Driver configuration

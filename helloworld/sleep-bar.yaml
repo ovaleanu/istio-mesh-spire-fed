@@ -29,8 +29,8 @@ metadata:
     service: sleep
 spec:
   ports:
-  - port: 80
-    name: http
+    - port: 80
+      name: http
   selector:
     app: sleep
 ---
@@ -49,21 +49,21 @@ spec:
         app: sleep
       annotations:
         inject.istio.io/templates: "sidecar,spire"
-        spiffe.io/federatesWith: "google.com"
+        spiffe.io/federatesWith: "foo.com"
     spec:
       terminationGracePeriodSeconds: 0
       serviceAccountName: sleep
       containers:
-      - name: sleep
-        image: curlimages/curl
-        command: ["/bin/sleep", "infinity"]
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
-        - mountPath: /etc/sleep/tls
-          name: secret-volume
+        - name: sleep
+          image: curlimages/curl
+          command: ["/bin/sleep", "infinity"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/sleep/tls
+              name: secret-volume
       volumes:
-      - name: secret-volume
-        secret:
-          secretName: sleep-secret
-          optional: true
+        - name: secret-volume
+          secret:
+            secretName: sleep-secret
+            optional: true
 ---

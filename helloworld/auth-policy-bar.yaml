@@ -1,0 +1,31 @@
+# test:
+# (sleep@foo) -> ( helloworld@foo ) - do not allow
+# (sleep@foo) -> ( helloworld@bar ) - do not allow
+#
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "allow-sleep-foo"
+spec:
+  selector:
+    matchLabels:
+      app: helloworld
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["foo.com/ns/sleep/sa/sleep"]
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "deny-sleep-bar"
+spec:
+  selector:
+    matchLabels:
+      app: helloworld
+  action: DENY
+  rules:
+    - from:
+        - source:
+            principals: ["bar.com/ns/sleep/sa/sleep"]

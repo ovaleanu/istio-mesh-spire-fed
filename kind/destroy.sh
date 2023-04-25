@@ -1,4 +1,4 @@
 #/bin/bash
 
-kind delete clusters aws-cluster
-kind delete clusters google-cluster
+kind delete clusters foo-cluster
+kind delete clusters bar-cluster

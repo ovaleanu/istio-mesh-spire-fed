@@ -5,15 +5,15 @@ metadata:
 spec:
   profile: default
   meshConfig:
-    trustDomain: aws.com
+    trustDomain: foo.com
     trustDomainAliases:
-    - google.com
+      - bar.com
   values:
     global:
       meshID: devup-mesh
       multiCluster:
-        clusterName: aws-cluster
-      network: aws-network
+        clusterName: foo-cluster
+      network: foo-network
     # This is used to customize the sidecar template
     sidecarInjectorWebhook:
       templates:
@@ -33,14 +33,9 @@ spec:
     pilot:
       k8s:
         env:
-          # Disable istiod CA Sever functionality
-          - name: ENABLE_CA_SERVER
+          # If enabled, if user introduces new intermediate plug-in CA, user need not to restart istiod to pick up certs. Istiod picks newly added intermediate plug-in CA certs and updates it. Plug-in new Root-CA not supported.
+          - name: AUTO_RELOAD_PLUGIN_CERTS
             value: "true"
-          # Check that istio-agent's namespace and service account match the ones in the JWT token presented in the connection
-          - name: PILOT_ENABLE_XDS_IDENTITY_CHECK
-            value: "true"
-            #          - name: PILOT_SKIP_VALIDATE_TRUST_DOMAIN
-            #            value: "true"
     ingressGateways:
       - name: istio-ingressgateway
         enabled: true
@@ -48,7 +43,7 @@ spec:
           istio: ingressgateway
         k8s:
           podAnnotations:
-            spiffe.io/federatesWith: "google.com"
+            spiffe.io/federatesWith: "bar.com"
           overlays:
             - apiVersion: apps/v1
               kind: Deployment
@@ -69,10 +64,10 @@ spec:
         label:
           istio: eastwestgateway
           app: istio-eastwestgateway
-          topology.istio.io/network: aws-network
+          topology.istio.io/network: foo-network
         k8s:
           podAnnotations:
-            spiffe.io/federatesWith: "google.com"
+            spiffe.io/federatesWith: "bar.com"
           overlays:
             - apiVersion: apps/v1
               kind: Deployment
@@ -92,7 +87,7 @@ spec:
             - name: ISTIO_META_ROUTER_MODE
               value: "sni-dnat"
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-              value: aws-network
+              value: foo-network
           service:
             ports:
               - name: status-port

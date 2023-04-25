@@ -9,7 +9,7 @@ data:
       bind_address = "0.0.0.0"
       bind_port = "8081"
       socket_path = "/run/spire/sockets/server.sock"
-      trust_domain = "aws.com"
+      trust_domain = "foo.com"
       data_dir = "/run/spire/data"
       log_level = "DEBUG"
       ca_key_type = "rsa-2048"
@@ -26,11 +26,11 @@ data:
             address = "0.0.0.0"
             port = 8443
         }
-        federates_with "google.com" {
+        federates_with "bar.com" {
           # NOTE: update the url
-          bundle_endpoint_url = "https://google-cluster-worker:30007"
+          bundle_endpoint_url = "https://bar-cluster-worker:30007"
           bundle_endpoint_profile "https_spiffe" {
-            endpoint_spiffe_id = "spiffe://google.com/spire/server"
+            endpoint_spiffe_id = "spiffe://bar.com/spire/server"
           }
         }
       }
@@ -48,7 +48,7 @@ data:
         plugin_data {
           clusters = {
             # NOTE: Change this to your cluster name
-            "aws-cluster" = {
+            "foo-cluster" = {
               use_token_review_api_validation = true
               service_account_allow_list = ["spire:spire-agent"]
             }
@@ -68,6 +68,14 @@ data:
           config_map = "trust-bundle"
           config_map_key = "root-cert.pem"
         }
+      }
+      UpstreamAuthority "cert-manager" {
+          plugin_data {
+              issuer_name = "selfsigned-ca"
+              issuer_kind = "ClusterIssuer"
+              issuer_group = "cert-manager.io"
+              namespace = "cert-manager"
+          }
       }
     }
 
