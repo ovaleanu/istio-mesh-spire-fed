@@ -3,7 +3,6 @@
 export CTX_CLUSTER1=kind-foo-cluster
 export CTX_CLUSTER2=kind-bar-cluster
 
-
 echo ">>> curl hellowold end point to see if they are up"
 sleep 2
 

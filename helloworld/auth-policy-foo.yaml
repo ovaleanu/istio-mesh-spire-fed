@@ -1,7 +1,3 @@
-# test:
-# (sleep@foo) -> ( helloworld@foo ) - do not allow
-# (sleep@foo) -> ( helloworld@bar ) - do not allow
-#
 apiVersion: "security.istio.io/v1beta1"
 kind: "AuthorizationPolicy"
 metadata:

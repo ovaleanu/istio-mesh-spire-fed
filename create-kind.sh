@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-
 # create kind cluster foo
 kind create cluster --config=kind/kind-foo.yaml
 

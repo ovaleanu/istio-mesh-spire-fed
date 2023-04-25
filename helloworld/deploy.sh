@@ -3,6 +3,7 @@
 export CTX_CLUSTER1=kind-foo-cluster
 export CTX_CLUSTER2=kind-bar-cluster
 
+
 kubectl create --context="${CTX_CLUSTER1}" namespace sleep
 kubectl create --context="${CTX_CLUSTER1}" namespace helloworld
 kubectl create --context="${CTX_CLUSTER2}" namespace sleep

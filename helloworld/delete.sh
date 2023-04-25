@@ -1,5 +1,6 @@
 #/bin/bash
 
+
 export CTX_CLUSTER1=kind-foo-cluster
 export CTX_CLUSTER2=kind-bar-cluster
 

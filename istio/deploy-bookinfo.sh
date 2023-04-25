@@ -3,6 +3,7 @@
 export CTX_CLUSTER1=kind-foo-cluster
 export CTX_CLUSTER2=kind-bar-cluster
 
+
 kubectl config use-context ${CTX_CLUSTER1}
 
 istioctl kube-inject -f bookinfo-with-spire-template.yaml | kubectl apply -f -

@@ -33,7 +33,7 @@ spec:
     pilot:
       k8s:
         env:
-          # If enabled, if user introduces new intermediate plug-in CA, user need not to restart istiod to pick up certs. Istiod picks newly added intermediate plug-in CA certs and updates it. Plug-in new Root-CA not supported.
+          ## If enabled, if user introduces new intermediate plug-in CA, user need not to restart istiod to pick up certs. Istiod picks newly added intermediate plug-in CA certs and updates it. Plug-in new Root-CA not supported.
           - name: AUTO_RELOAD_PLUGIN_CERTS
             value: "true"
     ingressGateways:
