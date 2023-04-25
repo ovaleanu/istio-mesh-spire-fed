@@ -7,7 +7,9 @@
 ### Install Spire on the clusters with federation
 `./install-spire.sh`
 
-### Install Istio on the clusters. `istioctl` needs to be in the PATH
+### Install Istio on the clusters 
+`istioctl` needs to be in the PATH
+
 `./install-istio.sh`
 
 ### Deploy bookinfo app
