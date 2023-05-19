@@ -8,7 +8,7 @@ export CTX_CLUSTER2=kind-bar-cluster
 # Install Spire on foo cluster
 kubectl config use-context ${CTX_CLUSTER1}
 
-kubectl apply -f ./spire/configmaps.yaml
+#kubectl apply -f ./spire/configmaps.yaml
 
 (cd spire ; ./deploy-spire-domain-foo.sh)
 
@@ -20,7 +20,7 @@ foo_bundle=$(kubectl exec --stdin spire-server-0 -c spire-server -n spire  -- /o
 # Install Spire on bar cluster
 kubectl config use-context ${CTX_CLUSTER2}
 
-kubectl apply -f ./spire/configmaps.yaml
+#kubectl apply -f ./spire/configmaps.yaml
 
 (cd spire ; ./deploy-spire-domain-bar.sh)
 

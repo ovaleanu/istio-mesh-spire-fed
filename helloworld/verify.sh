@@ -10,7 +10,7 @@ kubectl exec --context="${CTX_CLUSTER1}" -n sleep -c sleep \
     "$(kubectl get pod --context="${CTX_CLUSTER1}" -n sleep -l \
     app=sleep -o jsonpath='{.items[0].metadata.name}')" \
     -- curl -sS helloworld.helloworld:5000/hello
-sleep 3
+sleep 4
 
 kubectl exec --context="${CTX_CLUSTER2}" -n sleep -c sleep \
     "$(kubectl get pod --context="${CTX_CLUSTER2}" -n sleep -l \

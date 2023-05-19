@@ -6,8 +6,8 @@ metadata:
   namespace: istio-system
 spec:
   secretName: cacerts
-  duration: 720h 
-  renewBefore: 360h
+  duration: 480h 
+  renewBefore: 120h
   commonName: istiod.istio-system.svc
   isCA: true
   usages:
