@@ -5,15 +5,15 @@ metadata:
 spec:
   profile: default
   meshConfig:
-    trustDomain: foo.com
+    trustDomain: bar.com
     trustDomainAliases:
-      - bar.com
+    - foo.com
   values:
     global:
       meshID: devup-mesh
       multiCluster:
-        clusterName: foo-cluster
-      network: foo-network
+        clusterName: bar-cluster
+      network: bar-network
     # This is used to customize the sidecar template
     sidecarInjectorWebhook:
       templates:
@@ -44,7 +44,7 @@ spec:
           istio: ingressgateway
         k8s:
           podAnnotations:
-            spiffe.io/federatesWith: "bar.com"
+            spiffe.io/federatesWith: "foo.com"
           overlays:
             - apiVersion: apps/v1
               kind: Deployment
@@ -66,10 +66,10 @@ spec:
         label:
           istio: eastwestgateway
           app: istio-eastwestgateway
-          topology.istio.io/network: foo-network
+          topology.istio.io/network: bar-network
         k8s:
           podAnnotations:
-            spiffe.io/federatesWith: "bar.com"
+            spiffe.io/federatesWith: "foo.com"
           overlays:
             - apiVersion: apps/v1
               kind: Deployment
@@ -90,7 +90,7 @@ spec:
             - name: ISTIO_META_ROUTER_MODE
               value: "sni-dnat"
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-              value: foo-network
+              value: bar-network
           service:
             ports:
               - name: status-port
@@ -105,13 +105,13 @@ spec:
               - name: tls-webhook
                 port: 15017
                 targetPort: 15017
-          serviceAnnotations:
-            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
-            service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
-            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-            service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+#          serviceAnnotations:
+#            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+#            service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+#            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+#            service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 
             # These configurations fixed target group health checks
-            service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "traffic-port"
-            service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: "tcp"
-            service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+#            service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "traffic-port"
+#            service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: "tcp"
+#            service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"

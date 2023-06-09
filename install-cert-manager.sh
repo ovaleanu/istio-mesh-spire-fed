@@ -2,8 +2,8 @@
 
 set -e
 
-export CTX_CLUSTER1=kind-foo-cluster
-export CTX_CLUSTER2=kind-bar-cluster
+export CTX_CLUSTER1=foo-cluster
+export CTX_CLUSTER2=bar-cluster
 
 # Install cert-manager on foo cluster
 kubectl config use-context ${CTX_CLUSTER1}

@@ -1,8 +1,8 @@
 #/bin/bash
 
 
-export CTX_CLUSTER1=kind-foo-cluster
-export CTX_CLUSTER2=kind-bar-cluster
+export CTX_CLUSTER1=foo-cluster
+export CTX_CLUSTER2=bar-cluster
 
 kubectl delete --context="${CTX_CLUSTER1}" deployment helloworld-v1 -n helloworld
 kubectl delete --context="${CTX_CLUSTER2}" deployment helloworld-v2 -n helloworld

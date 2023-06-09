@@ -3,12 +3,15 @@
 set -e
 # create kind cluster foo
 kind create cluster --config=kind/kind-foo.yaml
-
+# simply the cluster name
+kubectl config rename-context "kind-foo-cluster" "foo-cluster" 
 # create kind cluster bar
 kind create cluster --config=kind/kind-bar.yaml
+# simply the cluster name
+kubectl config rename-context "kind-bar-cluster" "bar-cluster"   
 
-export CTX_CLUSTER1=kind-foo-cluster
-export CTX_CLUSTER2=kind-bar-cluster
+export CTX_CLUSTER1=foo-cluster
+export CTX_CLUSTER2=bar-cluster
 
 # install LB for the east west gw
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml --context=$CTX_CLUSTER1

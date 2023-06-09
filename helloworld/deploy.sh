@@ -1,7 +1,7 @@
 #/bin/bash
 
-export CTX_CLUSTER1=kind-foo-cluster
-export CTX_CLUSTER2=kind-bar-cluster
+export CTX_CLUSTER1=foo-cluster
+export CTX_CLUSTER2=bar-cluster
 
 
 kubectl create --context="${CTX_CLUSTER1}" namespace sleep
