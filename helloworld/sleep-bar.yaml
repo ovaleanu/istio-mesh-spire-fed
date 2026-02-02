@@ -47,9 +47,6 @@ spec:
     metadata:
       labels:
         app: sleep
-      annotations:
-        inject.istio.io/templates: "sidecar,spire"
-        spiffe.io/federatesWith: "foo.com"
     spec:
       terminationGracePeriodSeconds: 0
       serviceAccountName: sleep

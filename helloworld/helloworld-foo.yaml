@@ -10,7 +10,9 @@ metadata:
   labels:
     app: helloworld
     service: helloworld
+    istio.io/global: "true"
 spec:
+  trafficDistribution: PreferClose
   ports:
     - port: 5000
       name: http
@@ -35,9 +37,6 @@ spec:
       labels:
         app: helloworld
         version: v1
-      annotations:
-        inject.istio.io/templates: "sidecar,spire"
-        spiffe.io/federatesWith: "bar.com"
     spec:
       serviceAccountName: helloworld
       containers:

@@ -1,31 +1,44 @@
-#/bin/bash
+#!/bin/bash
 
-export CTX_CLUSTER1=foo-cluster
-export CTX_CLUSTER2=bar-cluster
+set -euo pipefail
+trap 'echo "Error on line $LINENO" >&2' ERR
 
-echo ">>> curl hellowold end point to see if they are up"
-sleep 2
+CTX_CLUSTER1="foo-cluster"
+CTX_CLUSTER2="bar-cluster"
+CURLS=10
 
-kubectl exec --context="${CTX_CLUSTER1}" -n sleep -c sleep \
-    "$(kubectl get pod --context="${CTX_CLUSTER1}" -n sleep -l \
-    app=sleep -o jsonpath='{.items[0].metadata.name}')" \
-    -- curl -sS helloworld.helloworld:5000/hello
-sleep 4
+get_sleep_pod() {
+  local ctx=$1
+  kubectl get pod --context="${ctx}" -n sleep -l app=sleep -o jsonpath='{.items[0].metadata.name}'
+}
 
-kubectl exec --context="${CTX_CLUSTER2}" -n sleep -c sleep \
-    "$(kubectl get pod --context="${CTX_CLUSTER2}" -n sleep -l \
-    app=sleep -o jsonpath='{.items[0].metadata.name}')" \
-    -- curl -sS helloworld.helloworld:5000/hello
-sleep 3
+echo ">>> Curling helloworld from foo-cluster (should hit local v1)..."
+for i in $(seq 1 "${CURLS}"); do
+  kubectl exec --context="${CTX_CLUSTER1}" -n sleep \
+      "$(get_sleep_pod "${CTX_CLUSTER1}")" \
+      -- curl -sS helloworld.helloworld:5000/hello
+done
 
-echo " >>> All the pods are running and accessible, scalling the local helloworld-v1 to 0, so that the curl command can reach the other pod in the other cluster"
+echo ">>> Curling helloworld from bar-cluster (should hit local v2)..."
+for i in $(seq 1 "${CURLS}"); do
+  kubectl exec --context="${CTX_CLUSTER2}" -n sleep \
+      "$(get_sleep_pod "${CTX_CLUSTER2}")" \
+      -- curl -sS helloworld.helloworld:5000/hello
+done
 
-kubectl -n helloworld scale deploy helloworld-v1 --context="${CTX_CLUSTER1}" --replicas 0
-sleep 4
+echo ">>> Scaling helloworld-v1 to 0 on foo-cluster to test cross-cluster routing..."
+kubectl -n helloworld scale deploy helloworld-v1 --context="${CTX_CLUSTER1}" --replicas=0
+kubectl -n helloworld rollout status deploy helloworld-v1 --context="${CTX_CLUSTER1}" --timeout=60s
 
-echo ">>> curling helloworld, it should reach the other cluster"
+echo ">>> Curling helloworld from foo-cluster (should reach v2 on bar-cluster)..."
+for i in $(seq 1 "${CURLS}"); do
+  kubectl exec --context="${CTX_CLUSTER1}" -n sleep \
+      "$(get_sleep_pod "${CTX_CLUSTER1}")" \
+      -- curl -sS helloworld.helloworld:5000/hello
+done
 
-kubectl exec --context="${CTX_CLUSTER1}" -n sleep -c sleep \
-    "$(kubectl get pod --context="${CTX_CLUSTER1}" -n sleep -l \
-    app=sleep -o jsonpath='{.items[0].metadata.name}')" \
-    -- curl -sS helloworld.helloworld:5000/hello
+echo ">>> Restoring helloworld-v1 to 1 replica..."
+kubectl -n helloworld scale deploy helloworld-v1 --context="${CTX_CLUSTER1}" --replicas=1
+kubectl -n helloworld rollout status deploy helloworld-v1 --context="${CTX_CLUSTER1}" --timeout=120s
+
+echo ">>> Verification complete."

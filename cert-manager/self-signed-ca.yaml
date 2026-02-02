@@ -15,6 +15,7 @@ metadata:
 spec:
   isCA: true
   duration: 21600h
+  renewBefore: 2160h
   secretName: selfsigned-ca
   commonName: certmanager-ca
   subject:

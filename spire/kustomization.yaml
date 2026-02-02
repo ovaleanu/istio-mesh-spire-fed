@@ -1,5 +1,0 @@
-resources:
-- spire-ns.yaml
-- spiffeid.spiffe.io_spiffeids.yaml
-- k8s-workload-registrar-crd-cluster-role.yaml
-- spiffe-csi-driver.yaml
